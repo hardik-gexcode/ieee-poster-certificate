@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/verify.js": {
+      "includeFiles": "data/**"
+    },
+    "api/certificate.js": {
+      "includeFiles": "{data/**,certificates/**,fonts/**}"
+    }
+  }
+}
