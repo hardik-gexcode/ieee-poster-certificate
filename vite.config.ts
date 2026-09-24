@@ -1,13 +1,10 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import devApi from "./dev-api.js";
 
 export default defineConfig({
-  plugins: [react()],
-  server: {
-    proxy: {
-      // Lets `npm run dev` (plain Vite) hit `vercel dev` for the API
-      // during local development. See README for the two ways to run this.
-      "/api": "http://localhost:3000",
-    },
-  },
+  // devApi() serves /api/* from the same handlers Vercel deploys, so
+  // `npm run dev` is fully self-contained — no `vercel dev` needed.
+  // It's dev-only; the production build ignores it.
+  plugins: [react(), devApi()],
 });

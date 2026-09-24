@@ -19,7 +19,8 @@ seal. No database, no admin panel — two CSV files are the entire backend.
    **never** asked for a position — it's only ever looked up server-side.
 3. On a match, a **Download Certificate** button hits `GET /api/certificate`
    — the function opens the right blank template from `certificates/`,
-   draws the name onto the name-line in a script font (`@napi-rs/canvas`),
+   draws the name onto the name-line in the same script font as the design
+   (Great Vibes, `@napi-rs/canvas`), centred and auto-shrunk for long names,
    and streams back the finished PNG. Nothing is pre-rendered or written to
    disk.
 4. `/api/certificate` re-verifies the pair itself, so a certificate can't
@@ -34,6 +35,7 @@ src/                     # the React app (Vite)
   App.tsx
   main.tsx
   index.css
+public/developer.jpg     # photo for the "Meet the Developer" card
 index.html               # Vite entry
 api/
   verify.js               # POST /api/verify
@@ -41,8 +43,10 @@ api/
 lib/
   roster.js                # CSV loading + name/email verification
   certificate.js            # draws the name onto the right template
-certificates/               # the 4 blank certificate templates
-fonts/DancingScript-Bold.ttf
+dev-api.js                  # dev-only: lets `npm run dev` serve /api/* (not used on Vercel)
+certificates/               # the 4 blank certificate templates (name area left empty)
+fonts/GreatVibes-Regular.ttf  # name font for the participation certificate
+fonts/DancingScript-Bold.ttf  # name font for the old 1st/2nd/3rd templates
 data/
   participants.csv          # everyone who took part (name, email)
   winners.csv                # only the top 3 (name, email, position)
@@ -92,20 +96,16 @@ npm install
 npm run dev
 ```
 
-Vite runs the React app at **http://localhost:5173**. The `/api/*` calls
-need Vercel's runtime though (they're serverless functions, not part of the
-Vite dev server) — easiest is to run both together:
+Open **http://localhost:5173** — that's the whole thing. `npm run dev` serves
+the React app *and* the `/api/verify` + `/api/certificate` functions (via
+`dev-api.js`, a small dev-only Vite plugin that runs the exact same handlers
+Vercel deploys). No `vercel dev`, no second terminal, no login needed.
+Edits to `api/`, `lib/` and the CSVs are picked up without restarting.
 
-```bash
-npm install -g vercel   # one-time
-vercel dev
-```
+Test with any row from `data/participants.csv`, e.g.
+`Hardik Gupta` / `guptahardik014@gmail.com`.
 
-`vercel dev` serves the whole thing (frontend + functions) on one port —
-usually **http://localhost:3000** — and reproduces Vercel's actual
-production routing, so if it works there, it'll work deployed. Test with
-the sample record already in `data/participants.csv`:
-Hardik Gupta / guptahardik014@gmail.com.
+(`vercel dev` still works too if you prefer it — it just isn't required.)
 
 ---
 
@@ -125,8 +125,11 @@ pick one — this is a new project, not a redeploy of something else.
 
 ## Customizing
 
-- **Certificate templates**: swap the PNGs in `certificates/`. If the
-  layout changes, update the pixel boxes in `NAME_BOX` in
-  `lib/certificate.js`.
-- **Name font/color**: `FONT_PATH` / `NAME_COLOR` in `lib/certificate.js`.
+- **Certificate templates**: swap the PNGs in `certificates/` (leave the name
+  area empty — the name is drawn by the code). If the layout changes, update
+  that certificate's `line` (`[x1, x2, y]` of the name underline, in template
+  pixels) in the `CERTS` table in `lib/certificate.js`.
+- **Name font/colour/size**: `font`, `color`, `startSize` in the same table.
+- **Meet the Developer card**: bottom of `src/App.tsx`; photo is
+  `public/developer.jpg`.
 - **Page design/copy**: `src/App.tsx` (Tailwind utility classes).

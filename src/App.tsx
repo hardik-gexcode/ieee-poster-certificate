@@ -200,6 +200,34 @@ export default function App() {
         )}
       </main>
 
+      {/* Meet the Developer */}
+      <section className="w-full max-w-lg mt-6 bg-white rounded-2xl shadow-lg px-6 py-5 flex items-center gap-5 text-left">
+        <img
+          src="/developer.jpg"
+          alt="Hardik Gupta, developer of this portal"
+          width={88}
+          height={88}
+          className="w-[88px] h-[88px] rounded-full object-cover border-4 border-[#eef1f6] shadow-md shrink-0"
+        />
+        <div className="min-w-0">
+          <span className="inline-block font-extrabold text-[11px] tracking-wider text-white bg-[#ec4899] rounded-sm px-3 py-1 -rotate-2 mb-2">
+            MEET THE DEVELOPER
+          </span>
+          <p className="font-extrabold text-lg text-[#132241] leading-tight">Hardik Gupta</p>
+          <p className="text-xs text-[#5f6b7a] mt-0.5">
+            Builder of AI systems · B.Tech CSE (AI &amp; Data Science), JECRC Foundation
+          </p>
+          <a
+            href="https://hardik-agarwal-portfolio.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-2 text-[#2f7dfb] text-[13px] font-semibold hover:underline"
+          >
+            View portfolio →
+          </a>
+        </div>
+      </section>
+
       <footer className="mt-7 text-xs text-[#5f6b7a] text-center">
         Organized by IEEE JECRC Student Branch · 24 September 2026
       </footer>
